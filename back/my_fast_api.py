@@ -1,0 +1,112 @@
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware import Middleware
+# from pydantic import BaseModel
+from bot_instance import bot
+import os
+import redis.asyncio as aioredis
+import logging
+# r = aioredis.Redis(host="localhost",
+#                    port=6379,
+#                    decode_responses=True)
+
+
+
+
+
+r = aioredis.Redis(
+    host=os.getenv("REDIS_HOST", "redis"),
+    port=int(os.getenv("REDIS_PORT", 6379)),
+    decode_responses=True,
+)
+
+
+f_api = FastAPI(
+    middleware=[
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    ]
+)
+
+logger = logging.getLogger("fastapi")
+
+@f_api.post("/receive_telegram_data")
+async def receive_telegram_data(data: dict):
+    print("PY Charm speak 📦 Полученные данные от Telegram:", data)
+    logger.warning(f"📦 Telegram data: {data}")
+    return {"ok": True}
+
+
+@f_api.post("/get-user-months")
+async def get_user_months(request: Request):
+    data = await request.json()
+    user_id = data["user_id"]
+    # Формируем ключ по которому можно достучаться до месяцев юзера
+    key_months = f"user:{user_id}:months"
+
+    # получаем все месяцы из SET
+    raw_months = await r.smembers(key_months)
+
+    # приводим к формату фронта
+    monaten = []
+    for item in raw_months:
+        year, month = item.split(":")
+        monaten.append({
+            "year": int(year),
+            "month": month
+        })
+
+
+    # if user_id not in users_db:  # Не удалять !
+    #     users_db[user_id] = {"monaten": []}
+
+    return {"monaten": monaten }
+
+
+@f_api.post("/month-select")
+async def month_select(request: Request):
+    data = await request.json()
+    print('coming data = ', data)
+    user_id = data["user_id"]
+    month = data["month"]
+    year = data["year"]
+    selected = data["selected"]
+
+
+    key_months = f"user:{user_id}:months"
+    value = f"{year}:{month}"
+
+    if selected:
+        # добавить месяц
+        await r.sadd(key_months, value)
+    else:
+        # удалить месяц
+        await r.srem(key_months, value)
+
+        await bot.send_message(
+                chat_id=user_id,
+                text=f"❌ Der Monat <b> {month}  {year} </b> wurde aus Ihrer Datenbank entfernt."
+            )
+
+    # вернуть обновлённый список
+    raw_months = await r.smembers(key_months)
+
+    monaten = []
+    for item in raw_months:
+        y, m = item.split(":")
+        monaten.append({
+            "year": int(y),
+            "month": m
+        })
+
+    return {
+        "status": "ok",
+        "monaten": monaten
+    }
+
+
