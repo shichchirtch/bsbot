@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: [
-      "4141dd548975.ngrok-free.app"
+      "bsbot.org"
     ]
   }
 })
