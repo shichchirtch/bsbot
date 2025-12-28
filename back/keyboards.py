@@ -4,7 +4,7 @@ web_button = (
     KeyboardButton(
         text="Открыть Web App",
         web_app=WebAppInfo(
-        url="https://0647b927c699.ngrok-free.app ")
+        url="https://0647b927c699.ngrok-free.app")
     )
 )
 

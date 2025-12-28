@@ -2,10 +2,11 @@ from aiogram.types import CallbackQuery
 from aiogram_dialog.api.entities.modes import ShowMode
 from aiogram_dialog.widgets.kbd import ManagedRadio
 from aiogram_dialog import DialogManager
-from my_fast_api import r
+from my_fast_api import get_redis
 
 
 async def get_user_count():
+    r = await get_redis()
     users_started_bot_allready = await r.scard("users")  # Считаю юзеров
     return users_started_bot_allready
 
@@ -19,6 +20,7 @@ async def radio_spam_button_clicked(callback: CallbackQuery,
 
     key_profile = f"user:{user_id}:profile"
     choice = callback.data[-1]
+    r = await get_redis()
     if choice == '2':
         await r.hset(key_profile, mapping={
             "spam_opt_in": "2",

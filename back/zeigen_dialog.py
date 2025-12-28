@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery
 from bot_instance import ZEIGEN, dp,bot_storage_key
 from aiogram_dialog.widgets.text import Const, Format
 from aiogram_dialog.widgets.kbd import Button, Row, Cancel, Select, Group
-from my_fast_api import r
+from my_fast_api import get_redis
 
 PAGE_SIZE = 5
 
@@ -18,7 +18,7 @@ async def show_my_notes(callback: CallbackQuery, wiget:Button,
     user_id = str(callback.from_user.id)
     print('user_id = ', user_id)
     dialog_manager.dialog_data["page"] = 0 # Устанавливаю начальную страницу
-
+    r = await get_redis()
     # 🔥 получаем список ключей заметок из Redis
     notes_keys = await r.hkeys(f"user:{user_id}:notes")
     print("notes_keys =", notes_keys)
@@ -39,6 +39,7 @@ async def show_single_note(callback: CallbackQuery, Select,
                            dialog_manager: DialogManager,
                            item: str):
     # item — это название заметки (ключ словаря)
+    r = await get_redis()
     print('item = ', item)
     user_id = str(callback.from_user.id)
     dialog_manager.dialog_data['current_key'] = item # Помещаю ключ для удаления заметки
@@ -79,7 +80,7 @@ async def entfern_notes(callback: CallbackQuery, widget: Button,
             return
 
         redis_key = f"user:{user_id}:notes"
-
+        r = await get_redis()
         # Удаляем поле из HASH
         deleted = await r.hdel(redis_key, current_key)
         if deleted:

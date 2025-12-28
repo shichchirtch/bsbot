@@ -11,7 +11,7 @@ import json
 import operator, asyncio, datetime
 from external_functions import radio_spam_button_clicked
 from static_func import *
-from my_fast_api import r
+from my_fast_api import get_redis
 
 
 async def get_spam(dialog_manager: DialogManager, **kwargs):
@@ -29,7 +29,7 @@ async def message_text_handler(message: Message, widget: MessageInput, dialog_ma
     dialog_manager.dialog_data['note'] = note
     dialog_manager.dialog_data['foto_id'] = ''
     notiz_key = form_key_note(note)
-
+    r  = await get_redis()
     await r.hset(
         f"user:{user_id}:notes",
         notiz_key,
@@ -60,7 +60,7 @@ async def accepting_foto(message: Message, widget: MessageInput, dialog_manager:
     # user_dict = bot_dict[user_id]
     # user_dict['notes'][capture] = foto_id
     # await dp.storage.update_data(key=bot_storage_key, data=bot_dict)
-
+    r = await get_redis()
     await r.hset(
         f"user:{user_id}:notes",
         capture,
@@ -93,6 +93,7 @@ async def message_capture_handler(message: Message, widget: MessageInput, dialog
     capture = form_capture(message.text)
     foto_id = dialog_manager.dialog_data['foto_id']
     old_capture = dialog_manager.dialog_data['capture']
+    r = await get_redis()
     redis_key = f"user:{user_id}:notes"
     notes_keys = await r.hkeys(f"user:{user_id}:notes")
     print("1 notes_keys =", notes_keys)
@@ -137,6 +138,7 @@ async def peredumal_func(callback: CallbackQuery, widget: Button,
                             dialog_manager: DialogManager, *args, **kwargs):
     print('peredumal_funk works')
     user_id = str(callback.from_user.id)
+    r = await get_redis()
     capture = dialog_manager.dialog_data['capture']
     redis_key = f"user:{user_id}:notes"
     await r.hdel(redis_key, capture)
