@@ -9,7 +9,7 @@ import logging
 ADMIN_ID = 6685637602 #6831521683
 
 r = aioredis.Redis(
-    host=os.getenv("REDIS_HOST", "redis"),
+    host=os.getenv("REDIS_HOST", "redis1226"),
     port=int(os.getenv("REDIS_PORT", 6379)),
     decode_responses=True,
 )
