@@ -1,25 +1,23 @@
 services:
-
   redis1226:
     image: redis:7
     restart: always
-    volumes:
-      - redis_data:/data
+    networks:
+      - internal
 
   backend:
     build: ./back
     restart: always
     env_file: main.env
-    depends_on:
-      - redis1226
     networks:
-      - default
+      - internal
       - proxy_network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`bsbot.org`) && PathPrefix(`/api`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.tls.certresolver=le"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
       - "traefik.http.services.backend.loadbalancer.server.port=8000"
 
   frontend:
@@ -31,7 +29,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`bsbot.org`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=le"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
   bot:
@@ -39,16 +38,16 @@ services:
     command: python main.py
     restart: always
     env_file: main.env
+    networks:
+      - internal
     depends_on:
       - redis1226
-      - backend
-
-volumes:
-  redis_data:
 
 networks:
+  internal:
   proxy_network:
     external: true
+
 
 
 
