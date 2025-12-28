@@ -16,11 +16,11 @@ ch_router = Router()
 async def command_start_process(message:Message, dialog_manager: DialogManager, state:FSMContext):
     user_id = str(message.from_user.id)
     user_name = message.from_user.first_name
-
+    print('vor Redis')
     # инициализировать профиль в Redis (если ещё нет)
     key_profile = f"user:{user_id}:profile"
     exists = await r.exists(key_profile)
-    # print('exists = ', exists)
+    print('after Redis = ', )
 
     if not exists:
         await r.hset(key_profile, mapping={
