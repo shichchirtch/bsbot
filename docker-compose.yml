@@ -48,8 +48,7 @@ services:
       sh -c "certbot certonly --webroot
       -w /var/www/certbot
       -d bsbot.org
-      -d www.bsbot.org
-      --email you@example.com
+      --email ivanvol9l@gmail.com
       --agree-tos
       --non-interactive"
 
