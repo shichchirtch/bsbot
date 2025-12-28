@@ -45,7 +45,7 @@ export default function AddMonaten(){
 
             // Проверка лимита
             if (!exists && updated.length === 4) {
-                openModal("Поздравляем! Вы собрали 4 взноса (тест).");
+                openModal("Herzlichen Glückwunsch! Sie haben 60 Beiträge erreicht !");
             }
 
             return updated;  // ← НЕ объект, только массив

@@ -6,7 +6,7 @@ import os
 import redis.asyncio as aioredis
 import logging
 
-ADMIN_ID = 6831521683
+ADMIN_ID = 6685637602 #6831521683
 
 r = aioredis.Redis(
     host=os.getenv("REDIS_HOST", "redis"),
@@ -50,12 +50,15 @@ async def receive_telegram_data(data: dict):
 @f_api.post("/api/get-user-months")
 async def get_user_months(request: Request):
     data = await request.json()
+    print('data = ', data)
     user_id = data["user_id"]
     # Формируем ключ по которому можно достучаться до месяцев юзера
     key_months = f"user:{user_id}:months"
+    print('key_months = ', key_months)
 
     # получаем все месяцы из SET
     raw_months = await r.smembers(key_months)
+    print('Месяцы юзера = ', raw_months)
 
     # приводим к формату фронта
     monaten = []
