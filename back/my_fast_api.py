@@ -1,16 +1,10 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware import Middleware
-# from pydantic import BaseModel
 from bot_instance import bot
 import os
 import redis.asyncio as aioredis
 import logging
-# r = aioredis.Redis(host="localhost",
-#                    port=6379,
-#                    decode_responses=True)
-
-
 
 ADMIN_ID = 6831521683
 
@@ -35,12 +29,12 @@ f_api = FastAPI(
 
 logger = logging.getLogger("fastapi")
 
-from fastapi import APIRouter
+# from fastapi import APIRouter
+#
+# api_router = APIRouter(prefix="/api")
 
-api_router = APIRouter(prefix="/api")
 
-
-@f_api.post("/receive_telegram_data")
+@f_api.post("api/receive_telegram_data")
 async def receive_telegram_data(data: dict):
     print("🔥 FASTAPI RECEIVED", data)
     # return {"ok": True}
@@ -53,7 +47,7 @@ async def receive_telegram_data(data: dict):
     return {"ok": True}
 
 
-@f_api.post("/get-user-months")
+@f_api.post("api/get-user-months")
 async def get_user_months(request: Request):
     data = await request.json()
     user_id = data["user_id"]
@@ -79,7 +73,7 @@ async def get_user_months(request: Request):
     return {"monaten": monaten }
 
 
-@f_api.post("/month-select")
+@f_api.post("api/month-select")
 async def month_select(request: Request):
     data = await request.json()
     print('coming data = ', data)
@@ -121,4 +115,4 @@ async def month_select(request: Request):
     }
 
 
-f_api.include_router(api_router)
+# f_api.include_router(api_router)
