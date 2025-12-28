@@ -1,25 +1,27 @@
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/userContextJS.js";
+import {useNavigate} from "react-router-dom";
+import {UserContext} from "../context/userContextJS.js";
 import {useContext} from "react";
-
 
 
 function StartButton() {
     const navigate = useNavigate();
-    const { user, setMonaten } = useContext(UserContext);
+    const {user, setMonaten} = useContext(UserContext);
     console.log("fetch start");
 
     async function handleStart() {
+        if (!user?.id) return;
+        const userId = user.id
         try {
             const res = await fetch("https://bsbot.org/api/get-user-months", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id: user.id })
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({user_id: user.id})
             });
 
             const data = await res.json();
 
             console.log("📩 Получены месяцы:", data);
+            sessionStorage.setItem("telegramUserId", userId);
 
             // Загружаем месяцы в контекст
             setMonaten(data.monaten || []);
@@ -32,7 +34,7 @@ function StartButton() {
         }
     }
 
-        return (
+    return (
         <button className="
         w-full
         max-w-xs

@@ -12,7 +12,7 @@ import logging
 
 
 
-
+ADMIN_ID = 6831521683
 
 r = aioredis.Redis(
     host=os.getenv("REDIS_HOST", "redis"),
@@ -38,7 +38,12 @@ logger = logging.getLogger("fastapi")
 @f_api.post("/receive_telegram_data")
 async def receive_telegram_data(data: dict):
     print("PY Charm speak 📦 Полученные данные от Telegram:", data)
+
+    user_id = data["user_id"]
     logger.warning(f"📦 Telegram data: {data}")
+    await bot.send_message(chat_id= ADMIN_ID,
+                           text = f"user_id from webapp: {user_id}")
+
     return {"ok": True}
 
 
