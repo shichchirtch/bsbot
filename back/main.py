@@ -24,6 +24,7 @@ async def main():
 
     # dialogs
     setup_dialogs(dp)
+    print("🤖 BOT STARTED")
 
     # старт бота
     await bot.delete_webhook(drop_pending_updates=True)

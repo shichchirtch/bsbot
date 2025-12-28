@@ -7,16 +7,21 @@ from aiogram.fsm.context import FSMContext
 from bot_instance import FSM_ST, ADMIN
 from aiogram_dialog import  DialogManager, StartMode
 from  external_functions import get_user_count
-from my_fast_api import r
-
+from my_fast_api import get_redis
+import logging
 
 ch_router = Router()
+
+logging.basicConfig(level=logging.INFO)
+print("🤖 LOGGING READY")
 
 @ch_router.message(CommandStart())
 async def command_start_process(message:Message, dialog_manager: DialogManager, state:FSMContext):
     user_id = str(message.from_user.id)
     user_name = message.from_user.first_name
+    r = await get_redis()
     print('vor Redis')
+
     # инициализировать профиль в Redis (если ещё нет)
     key_profile = f"user:{user_id}:profile"
     exists = await r.exists(key_profile)

@@ -8,12 +8,12 @@ import logging
 
 ADMIN_ID = 6685637602 #6831521683
 
-r = aioredis.Redis(
-    host=os.getenv("REDIS_HOST", "redis"),
-    port=int(os.getenv("REDIS_PORT", 6379)),
-    decode_responses=True,
-)
-
+async def get_redis():
+    return aioredis.Redis(
+        host=os.getenv("REDIS_HOST", "redis1226"),
+        port=int(os.getenv("REDIS_PORT", 6379)),
+        decode_responses=True,
+    )
 
 f_api = FastAPI(
     middleware=[
@@ -57,6 +57,7 @@ async def get_user_months(request: Request):
     print('key_months = ', key_months)
 
     # получаем все месяцы из SET
+    r = await get_redis()
     raw_months = await r.smembers(key_months)
     print('Месяцы юзера = ', raw_months)
 
@@ -88,9 +89,10 @@ async def month_select(request: Request):
 
     key_months = f"user:{user_id}:months"
     value = f"{year}:{month}"
-
+    r = await get_redis()
     if selected:
         # добавить месяц
+
         await r.sadd(key_months, value)
     else:
         # удалить месяц
