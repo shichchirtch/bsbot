@@ -29,6 +29,8 @@ async def command_start_process(message:Message, dialog_manager: DialogManager, 
         })
         await r.sadd("users", user_id)  #  Добавляю в сэт tg_us_id
 
+    await message.answer(f'r = {r}')
+
     users_started_bot_allready = await get_user_count()  #  Считаю юзеров
 
     await message.answer(text=f'Hallo, {html.bold(html.quote(user_name))}!\nIch bin MINI APP Bot'
