@@ -34,7 +34,7 @@ logger = logging.getLogger("fastapi")
 # api_router = APIRouter(prefix="/api")
 
 
-@f_api.post("api/receive_telegram_data")
+@f_api.post("/api/receive_telegram_data")
 async def receive_telegram_data(data: dict):
     print("🔥 FASTAPI RECEIVED", data)
     # return {"ok": True}
@@ -47,7 +47,7 @@ async def receive_telegram_data(data: dict):
     return {"ok": True}
 
 
-@f_api.post("api/get-user-months")
+@f_api.post("/api/get-user-months")
 async def get_user_months(request: Request):
     data = await request.json()
     user_id = data["user_id"]
@@ -73,7 +73,7 @@ async def get_user_months(request: Request):
     return {"monaten": monaten }
 
 
-@f_api.post("api/month-select")
+@f_api.post("/api/month-select")
 async def month_select(request: Request):
     data = await request.json()
     print('coming data = ', data)
