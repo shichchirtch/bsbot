@@ -38,7 +38,7 @@ logger = logging.getLogger("fastapi")
 from fastapi import APIRouter
 
 api_router = APIRouter(prefix="/api")
-f_api.include_router(api_router)
+
 
 @f_api.post("/receive_telegram_data")
 async def receive_telegram_data(data: dict):
@@ -121,3 +121,4 @@ async def month_select(request: Request):
     }
 
 
+f_api.include_router(api_router)
