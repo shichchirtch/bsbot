@@ -20,7 +20,7 @@ async def command_start_process(message:Message, dialog_manager: DialogManager, 
     # инициализировать профиль в Redis (если ещё нет)
     key_profile = f"user:{user_id}:profile"
     exists = await r.exists(key_profile)
-    print('exists = ', exists)
+    # print('exists = ', exists)
 
     if not exists:
         await r.hset(key_profile, mapping={
@@ -29,7 +29,7 @@ async def command_start_process(message:Message, dialog_manager: DialogManager, 
         })
         await r.sadd("users", user_id)  #  Добавляю в сэт tg_us_id
 
-    await message.answer(f'r = {r}')
+    # await message.answer(f'r = {r}')
 
     users_started_bot_allready = await get_user_count()  #  Считаю юзеров
 
