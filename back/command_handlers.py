@@ -29,7 +29,7 @@ async def command_start_process(message:Message, dialog_manager: DialogManager, 
         })
         await r.sadd("users", user_id)  #  Добавляю в сэт tg_us_id
 
-    # await message.answer(f'r = {r}')
+    # await message.answer(f'r = {r.items}')
 
     users_started_bot_allready = await get_user_count()  #  Считаю юзеров
 
