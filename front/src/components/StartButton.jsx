@@ -12,7 +12,7 @@ function StartButton() {
         if (!user?.id) return;
         const userId = user.id
         try {
-            const res = await fetch("https://bsbot.org/api/get-user-months", {
+            const res = await fetch("https://bsbot.org/get-user-months", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({user_id: user.id})

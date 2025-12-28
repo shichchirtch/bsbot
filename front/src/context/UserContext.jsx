@@ -40,7 +40,7 @@ export function UserProvider({ children }) {
         localStorage.setItem("telegramUserId", tgId);
 
         // можно уведомить backend
-        fetch("https://bsbot.org/api/receive_telegram_data", {
+        fetch("https://bsbot.org/receive_telegram_data", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ user_id: tgId })
