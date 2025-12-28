@@ -13,14 +13,15 @@ import logging
 ch_router = Router()
 
 logging.basicConfig(level=logging.INFO)
-print("🤖 LOGGING READY")
+logger = logging.getLogger(__name__)
+
 
 @ch_router.message(CommandStart())
 async def command_start_process(message:Message, dialog_manager: DialogManager, state:FSMContext):
     user_id = str(message.from_user.id)
     user_name = message.from_user.first_name
     r = await get_redis()
-    print('vor Redis')
+    logger.warning("🔥 BOT HANDLER CALLED")
 
     # инициализировать профиль в Redis (если ещё нет)
     key_profile = f"user:{user_id}:profile"

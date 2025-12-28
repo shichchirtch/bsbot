@@ -81,6 +81,7 @@ async def get_user_months(request: Request):
 async def month_select(request: Request):
     data = await request.json()
     print('coming data = ', data)
+    logger.warning(f"📦LOGGER 84 : {data}")
     user_id = data["user_id"]
     month = data["month"]
     year = data["year"]

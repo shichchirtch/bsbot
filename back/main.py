@@ -1,9 +1,7 @@
 import asyncio
-
 from bot_instance import bot, dp, bot_storage_key
 from command_handlers import ch_router
 from start_menu import set_main_menu
-
 from aiogram_dialog import setup_dialogs
 from zeigen_dialog import zeigen_dialog
 from dialogs import start_dialog, create_dialog
@@ -24,7 +22,6 @@ async def main():
 
     # dialogs
     setup_dialogs(dp)
-    print("🤖 BOT STARTED")
 
     # старт бота
     await bot.delete_webhook(drop_pending_updates=True)
