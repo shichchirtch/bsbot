@@ -31,6 +31,7 @@ function ToggleMonatenButton({ label, year, isActive, toggleMonth }) {
                     year: year,
                     selected: newState,
                 })
+
             });
         } catch (error) {
             console.error("Ошибка отправки:", error);

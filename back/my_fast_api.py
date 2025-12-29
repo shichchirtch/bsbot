@@ -46,6 +46,15 @@ async def receive_telegram_data(data: dict):
                            text = f"user_id from webapp: {user_id}")
     return {"ok": True}
 
+@f_api.post("/api/start-test")
+async def start_test(data: dict):
+    print("✅ START TEST CALLED", data)
+    return {
+        "ok": True,
+        "message": "Backend is alive",
+        "user_id": data.get("user_id")
+    }
+
 
 @f_api.post("/api/get-user-months")
 async def get_user_months(request: Request):

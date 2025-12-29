@@ -4,34 +4,56 @@ import {useContext} from "react";
 
 
 function StartButton() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const {user, setMonaten} = useContext(UserContext);
-    console.log("fetch start");
+    console.log("user", user.id);
 
     async function handleStart() {
-        if (!user?.id) return;
-        const userId = user.id
-        try {
-            const res = await fetch("https://bsbot.org/api/get-user-months", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({user_id: user.id})
-            });
 
-            const data = await res.json();
+        console.log("🟡 START CLICK");
 
-            console.log("📩 Получены месяцы:", data);
-            sessionStorage.setItem("telegramUserId", userId);
+    try {
+        const res = await fetch("https://bsbot.org/api/start-test", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: user?.id || "NO_ID" })
+        });
 
-            // Загружаем месяцы в контекст
-            setMonaten(data.monaten || []);
+        console.log("🟢 RESPONSE STATUS", res.status);
 
-            // Переход только после загрузки
-            navigate("/addmonaten");
+        const data = await res.json();
+        console.log("🟢 RESPONSE DATA", data);
 
-        } catch (err) {
-            console.error("Ошибка загрузки месяцев:", err);
-        }
+        alert("OK: " + data.message);
+
+    } catch (err) {
+        console.error("🔴 START TEST ERROR", err);
+        alert("ERROR");
+    }
+
+        // if (!user?.id) return;
+        // const userId = user.id
+        // try {
+        //     const res = await fetch("https://bsbot.org/api/get-user-months", {
+        //         method: "POST",
+        //         headers: {"Content-Type": "application/json"},
+        //         body: JSON.stringify({user_id: user.id})
+        //     });
+        //
+        //     const data = await res.json();
+        //
+        //     console.log("📩 Получены месяцы:", data);
+        //     sessionStorage.setItem("telegramUserId", userId);
+        //
+        //     // Загружаем месяцы в контекст
+        //     setMonaten(data.monaten || []);
+        //
+        //     // Переход только после загрузки
+        //     navigate("/addmonaten");
+        //
+        // } catch (err) {
+        //     console.error("Ошибка загрузки месяцев:", err);
+        // }
     }
 
 

@@ -8,9 +8,9 @@ export function UserProvider({ children }) {
     const [monaten, setMonaten] = useState([]);
 
     const user = {
-        id: userId,
-        monaten
-    };
+        id: userId, // при первом открытии должна быть null !
+        monaten // при откытии должен быть пустой список
+    }; // мы должны всё сохранять в сторадж и при посторном открытии пытаться сначала найти данные юзера там
 
     // --- Модалка ---
     const [modal, setModal] = useState({
