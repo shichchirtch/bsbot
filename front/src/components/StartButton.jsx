@@ -9,7 +9,7 @@ function StartButton() {
     console.log("user", user.id);
 
     async function handleStart() {
-
+        console.log("user1234", user.id);
         console.log("🟡 START CLICK");
 
     try {
