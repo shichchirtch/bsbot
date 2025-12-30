@@ -33,6 +33,11 @@ logger = logging.getLogger("fastapi")
 #
 # api_router = APIRouter(prefix="/api")
 
+@f_api.get("/ping")
+async def ping():
+    return {"pong": True}
+
+
 
 @f_api.post("/api/receive_telegram_data")
 async def receive_telegram_data(data: dict):
